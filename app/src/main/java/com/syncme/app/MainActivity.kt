@@ -50,12 +50,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         prefs = getSharedPreferences("syncme", MODE_PRIVATE)
 
-        if (prefs.getString(PREF_SERVER, "").isNullOrEmpty()) {
-            showSetupDialog()
-        } else {
-            loadDashboard()
-            requestPermissions()
-        }
+        showSetupDialog()
     }
 
     private fun showSetupDialog() {
@@ -63,9 +58,18 @@ class MainActivity : AppCompatActivity() {
             orientation = LinearLayout.VERTICAL
             setPadding(48, 32, 48, 16)
         }
-        val etServer = EditText(this).apply { hint = "https://your-tunnel.ms" }
-        val etToken  = EditText(this).apply { hint = "Token"; setText(DEFAULT_TOKEN) }
-        val etName   = EditText(this).apply { hint = "Device name"; setText(Build.MODEL) }
+        val etServer = EditText(this).apply {
+            hint = "https://your-tunnel.ms"
+            setText(prefs.getString(PREF_SERVER, ""))
+        }
+        val etToken  = EditText(this).apply {
+            hint = "Token"
+            setText(prefs.getString(PREF_TOKEN, DEFAULT_TOKEN))
+        }
+        val etName   = EditText(this).apply {
+            hint = "Device name"
+            setText(prefs.getString(PREF_NAME, Build.MODEL))
+        }
         layout.addView(TextView(this).apply { text = "Server URL" })
         layout.addView(etServer)
         layout.addView(TextView(this).apply { text = "Token"; setPadding(0,16,0,0) })

